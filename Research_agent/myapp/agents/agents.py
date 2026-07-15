@@ -1,5 +1,5 @@
 """
-Agents and Chains for the Multi-Agent Research System.
+Multi-Agent Research System.
 
 Four components:
   - Search Agent  : finds relevant web sources

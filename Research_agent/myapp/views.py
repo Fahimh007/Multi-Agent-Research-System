@@ -8,11 +8,9 @@ from django.views.decorators.http import require_http_methods
 
 from myapp.pipelines.pipeline import run_research_pipeline
 
-
 def home(request):
     """Render the main research assistant page."""
     return render(request, "home.html", {})
-
 
 @csrf_exempt
 @require_http_methods(["POST"])

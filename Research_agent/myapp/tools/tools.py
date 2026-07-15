@@ -29,15 +29,13 @@ HEADERS = {
     )
 }
 
-
 # ── Web Search ───────────────────────────────────────────────────────────────
-
 @tool
 def web_search(query: str) -> str:
     """Search the web for recent and reliable information on a topic.
     Returns Titles, URLs and snippets."""
 
-    results = tavily.search(query=query, max_results=5)
+    results = tavily.search(query=query, max_results=4)
     out = []
     for r in results["results"]:
         out.append(
@@ -46,26 +44,22 @@ def web_search(query: str) -> str:
         )
     return "\n----\n".join(out)
 
-
 # ── URL Scraper ──────────────────────────────────────────────────────────────
-
 def _clean_text(text: str) -> str:
     """Remove excessive whitespace while keeping paragraph breaks."""
     text = re.sub(r"[ \t]+", " ", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
 
-
 def _scrape_with_trafilatura(html: str) -> str | None:
-    """Strategy 1 – trafilatura (best for articles)."""
+    """Strategy 1 - trafilatura (best for articles)."""
     extracted = trafilatura.extract(html, include_comments=False)
     if extracted and len(extracted) > 100:
         return _clean_text(extracted)
     return None
 
-
 def _scrape_with_readability(html: str) -> str | None:
-    """Strategy 2 – readability-lxml (good fallback for complex pages)."""
+    """Strategy 2 - readability-lxml (good fallback for complex pages)."""
     try:
         doc = Document(html)
         summary_html = doc.summary()
@@ -77,9 +71,8 @@ def _scrape_with_readability(html: str) -> str | None:
         pass
     return None
 
-
 def _scrape_with_beautifulsoup(html: str) -> str | None:
-    """Strategy 3 – BeautifulSoup raw text (last resort)."""
+    """Strategy 3 - BeautifulSoup raw text (last resort)."""
     try:
         soup = BeautifulSoup(html, "lxml")
         # Remove script/style tags
